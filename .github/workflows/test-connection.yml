@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   ping-server:
-    runs-on: self-hosted  # <--- Runs on your laptop
+    runs-on: self-hosted  
     steps:
       - name: Check Backend Status
         run: |
