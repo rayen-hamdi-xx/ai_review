@@ -1,0 +1,12 @@
+name: Test Local Connection
+on: [push]
+
+jobs:
+  ping-server:
+    runs-on: self-hosted  # <--- Runs on your laptop
+    steps:
+      - name: Check Backend Status
+        run: |
+          echo "Testing connection to Django..."
+          # This tries to hit your local Health Check endpoint
+          curl -v http://localhost:8000/
