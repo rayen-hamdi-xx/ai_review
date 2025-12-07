@@ -1,0 +1,59 @@
+name: AI Security Pipeline
+on: [push, pull_request]
+
+jobs:
+  security-analysis:
+    name: Security Analysis with AI
+    runs-on: self-hosted  
+    defaults:
+      run:
+        shell: bash       
+
+    steps:
+      # 1. Get the latest code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Package the code (Zip/Tar)
+      - name: Bundle Code for Scanning
+        run: |
+          echo "📦 Packaging code..."
+          # Create a compressed tarball of the current folder
+          # git archive is faster and cleaner than 'zip' or 'tar' manually
+          git archive --format=tar.gz -o source_code.tar.gz HEAD
+
+      # 3. Send to Django API (Localhost)
+      - name: Send to AI Engine
+        run: |
+          echo "🚀 Sending to Django API at http://localhost:8000..."
+          
+          # Extract Git Metadata
+          REPO_NAME="${{ github.repository }}"
+          COMMIT_HASH=$(git rev-parse HEAD)
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          # Extract Author Email (Used for Gravatar in Dashboard)
+          AUTHOR_EMAIL=$(git log -1 --pretty=format:'%ae')
+
+          echo "   - Repo: $REPO_NAME"
+          echo "   - Commit: $COMMIT_HASH"
+          echo "   - Author: $AUTHOR_EMAIL"
+
+          # Send POST request
+          response=$(curl -s -w "%{http_code}" -o response.json -X POST http://localhost:8000/api/scan/upload/ \
+            -F "file=@source_code.tar.gz" \
+            -F "repo_name=$REPO_NAME" \
+            -F "commit_hash=$COMMIT_HASH" \
+            -F "branch=$BRANCH_NAME" \
+            -F "triggered_by=$AUTHOR_EMAIL")
+
+          # Parse Response Code (last 3 chars)
+          http_code=${response: -3}
+
+          if [ "$http_code" -eq 201 ]; then
+            echo "✅ Scan Started Successfully!"
+            cat response.json
+          else
+            echo "❌ Failed to start scan. HTTP Code: $http_code"
+            cat response.json
+            exit 1
+          fi
