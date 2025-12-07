@@ -1,6 +1,6 @@
 import sqlite3
 
-def get_user_data_vulnerable(username):
+def get_user_data(username):
     conn = sqlite3.connect('example.db')
     cursor = conn.cursor()
     query = f"SELECT * FROM users WHERE username = '{username}'"
