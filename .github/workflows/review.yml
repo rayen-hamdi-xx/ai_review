@@ -29,7 +29,7 @@ jobs:
           Write-Output "   - Branch: $BRANCH_NAME"
 
           # Use curl.exe (the real tool) with backticks ` for line splitting in PowerShell
-          & curl.exe -s -o response.json -w "%{http_code}" -X POST http://localhost:8000/api/scan/upload/ `
+          & curl.exe -s -o response.json -w "%{http_code}" -X POST http://localhost:8000/scan/upload/ `
             -F "file=@source_code.tar.gz" `
             -F "repo_name=$REPO_NAME" `
             -F "commit_hash=$COMMIT_HASH" `
