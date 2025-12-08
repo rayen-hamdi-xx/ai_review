@@ -22,7 +22,7 @@ jobs:
           $REPO_NAME = "${{ github.repository }}"
           $COMMIT_HASH = git rev-parse HEAD
           $BRANCH_NAME = "${{ github.ref_name }}"
-          $AUTHOR_EMAIL = ${{ github.actor }}
+          $AUTHOR_EMAIL = "${{ github.actor }}"
           $REPO_URL = "${{ github.repository_url }}"
           $OWNER = "${{ github.repository_owner }}"
 
