@@ -36,7 +36,7 @@ jobs:
             -F "repo_name=$REPO_NAME" `
             -F "commit_hash=$COMMIT_HASH" `
             -F "branch=$BRANCH_NAME" `
-            -F "triggered_by=$AUTHOR_EMAIL"
+            -F "triggered_by=$AUTHOR_EMAIL" `
             -F "repo_url=$REPO_URL" `
             -F "owner=$OWNER"
 

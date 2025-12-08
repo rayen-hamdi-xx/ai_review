@@ -11,4 +11,3 @@ def get_user_data(username):
     result = cursor.fetchall()
     conn.close()
     return result
-#dadzadza
