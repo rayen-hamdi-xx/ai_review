@@ -23,6 +23,8 @@ jobs:
           $COMMIT_HASH = git rev-parse HEAD
           $BRANCH_NAME = "${{ github.ref_name }}"
           $AUTHOR_EMAIL = git log -1 --pretty=format:'%ae'
+          $REPO_URL = "${{ github.repository_url }}"
+          $OWNER = "${{ github.repository_owner }}"
 
           Write-Output "   - Repo: $REPO_NAME"
           Write-Output "   - Commit: $COMMIT_HASH"
@@ -35,6 +37,8 @@ jobs:
             -F "commit_hash=$COMMIT_HASH" `
             -F "branch=$BRANCH_NAME" `
             -F "triggered_by=$AUTHOR_EMAIL"
+            -F "repo_url=$REPO_URL" `
+            -F "owner=$OWNER"
 
           if (Test-Path response.json) {
              Get-Content response.json
