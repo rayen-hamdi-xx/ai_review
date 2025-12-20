@@ -1,12 +1,13 @@
-# vulnerable_app.py
-import os
+import sqlite3
 
-def greet_user():
-    name = input("Enter your name: ")
-
-    # ❌ VULNERABILITY: Command Injection
-    # User input is directly passed to the system shell
-    os.system("echo Hello " + name)
-
-if __name__ == "__main__":
-    greet_user()
+def get_user_data(username):
+    conn = sqlite3.connect('example.db')
+    cursor = conn.cursor()
+    query = f"SELECT * FROM users WHERE username = '{username}'"
+    
+    print(f"Executing query: {query}")
+    cursor.execute(query)
+    
+    result = cursor.fetchall()
+    conn.close()
+    return result
